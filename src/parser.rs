@@ -15,7 +15,7 @@ _  / / /_  / / /__  __/
 #[derive(Parser, Debug)]
 #[command(
     name = "uue",
-    version = "1.0.0",
+    version = "0.1.0",
     about = "File Encryption Utility",
     long_about = None,
     before_help = BANNER,
@@ -24,8 +24,8 @@ _  / / /_  / / /__  __/
 
 pub struct Args {
     /// Target path (file or directory) to sweep
-    #[arg(short, long, value_name = "PATH")]
-    pub target: PathBuf,
+    #[arg(short, long, value_name = "PATH", global = true)]
+    pub target: Option<PathBuf>,
 
     #[command(subcommand)]
     pub action: Action,

@@ -33,10 +33,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Generate cryptographically safe operational salt block sequence initialization
     let mut salt = [0u8; SALT_LEN];
 
+    let target = match args.target {
+        Some(path) => path,
+        None => {
+            let mut cmd = <parser::Args as clap::CommandFactory>::command();
+            cmd.error(
+                clap::error::ErrorKind::MissingRequiredArgument,
+                "The following required arguments were not provided:\n  --target[-t] <PATH>",
+            ).exit();
+        }
+    };
+
     match args.action {
         Action::Encrypt => thread_rng().fill_bytes(&mut salt),
         Action::Decrypt => {
-            let file_salt = RecursiveFsEngine::read_salt_from_file(&args.target)?;
+            let file_salt = RecursiveFsEngine::read_salt_from_file(&target)?;
             salt.copy_from_slice(&file_salt);
         },
     };
@@ -52,7 +63,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Execute recursive system payload iteration engine
     println!("[*] Commencing cryptographic sweep operations...");
 
-    fs_engine.process_path(&args.target, args.action)?;
+    fs_engine.process_path(&target, args.action)?;
     
     println!("[+] Execution runtime lifecycle finished successfully.");
     Ok(())

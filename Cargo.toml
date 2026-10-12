@@ -2,6 +2,9 @@
 name = "uue"
 version = "0.1.0"
 edition = "2024"
+description = "CLI file encryption utility powered by AES-GCM."
+license = "MIT"
+repository = "https://github.com/nav-uue/uue"
 
 [dependencies]
 aes-gcm = "0.11.1"
